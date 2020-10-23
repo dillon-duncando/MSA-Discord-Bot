@@ -126,3 +126,7 @@ dmypy.json
 
 #bot config
 config.ini
+
+#bot generated images
+latex.png
+newplot.png
