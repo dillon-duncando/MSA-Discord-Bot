@@ -206,7 +206,10 @@ async def on_message(message):
                 timer = Timer()
                 timer.start()
                 time = timer.time()
-                expIncrement = 1
+                pFactor = bf.powerFactor(x)
+                x = pFactor[0]
+                expIncrement = pFactor[1]
+                #expIncrement = 1
                 while not bf.isPrime(x) and x != 1 and time < 60:
                     try:
                         p = next(primes)

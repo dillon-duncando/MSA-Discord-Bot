@@ -33,10 +33,27 @@ def isPerfectPower(n):
         return False
     exponent = 2
     while exponent <= math.log2(n):
-        if(round(n**(1/exponent), 2) % 1 == 0):
+        if(round(n**(1/exponent)) ** exponent == n):
             return True
         exponent = exponent + 1
     return False
+    
+#struggles with powers of mersenne primes due to floating point errors
+def powerFactor(n):
+    if(not isPerfectPower(n)):
+        return(n, 1)
+    else:
+        testExp = 2
+        while testExp <= math.log2(n):
+            if(round(n**(1/testExp)) ** testExp == n):
+                exponent = testExp
+                break
+            testExp = testExp + 1
+        if(isPerfectPower(round(n**(1/exponent)))):
+            factor = powerFactor(round(n**(1/exponent)))
+            return(factor[0], factor[1] * exponent)
+        else:
+            return(round(n**(1/exponent)), exponent)
 
 #naive prime detection algorithm    
 def isPrime(x):
