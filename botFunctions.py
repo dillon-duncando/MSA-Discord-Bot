@@ -27,14 +27,24 @@ def roll(text, index):
             return newRoll
     except:
         return 'beep boop. something went wrong.'
+        
+def isPerfectPower(n):
+    if(n < 1):
+        return False
+    exponent = 2
+    while exponent <= math.log2(n):
+        if(round(n**(1/exponent), 2) % 1 == 0):
+            return True
+        exponent = exponent + 1
+    return False
 
 #naive prime detection algorithm    
 def isPrime(x):
     #check if x is less than 2
     if(x < 2):
         return False
-    #check if x is a square number
-    if(x % math.sqrt(x) == 0):
+    #check if x is a perfect power
+    if(isPerfectPower(x)):
         return False
     #continue with naive algorithm
     primes = primeFromList()
