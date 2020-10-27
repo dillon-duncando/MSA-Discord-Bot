@@ -54,8 +54,19 @@ def powerFactor(n):
             return(factor[0], factor[1] * exponent)
         else:
             return(round(n**(1/exponent)), exponent)
+            
+#step 2 in aks algorithm
+def findMinr(n):
+    for r in range(2,max(4,math.ceil(math.log2(n)**5)+1)):
+        if(math.gcd(n,r) == 1):
+            flag = True
+            for k in range(1,math.ceil(math.log2(n)**2)):
+                if(pow(n,k,r) == 1):
+                    flag = False
+                    break
+            if(flag):
+                return(r)
 
-#naive prime detection algorithm    
 def isPrime(x):
     #check if x is less than 2
     if(x < 2):
@@ -63,12 +74,28 @@ def isPrime(x):
     #check if x is a perfect power
     if(isPerfectPower(x)):
         return False
-    #continue with naive algorithm
+    #use primelist to detect small primes
     primes = primeFromList()
     hypothesis = True
     p = next(primes)
-    while(hypothesis and p <= math.sqrt(x)):
+    #99999989 is the largest prime in the primelist.
+    #using the naive algorithm with the saved list is faster than steps 2 to 6 of aks
+    #but only so many prime numbers can be saved.
+    while(hypothesis and p <= math.sqrt(x) and p < 99999989):
         hypothesis = (x%p != 0)
         if(hypothesis):
             p = next(primes)
-    return hypothesis
+    if not hypothesis or p < 99999989:
+        return hypothesis
+    else:
+        #run steps 2 and 3 of aks
+        r = findMinr(x)
+        for i in range(r):
+            if(1 < math.gcd(i,x) < x):
+                return False
+        #step 4 of aks
+        if(r >= x):
+            return True
+        else:
+            #the rest of aks will go here
+            return hypothesis
