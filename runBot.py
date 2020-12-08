@@ -5,6 +5,7 @@ import sympy as sp
 import re, os, sys, math, time
 from configparser import *
 import pickle
+from PIL import Image
 import botFunctions as bf
 from pnglatex import pnglatex
 
@@ -170,6 +171,16 @@ async def on_message(message):
         command = message.content[(message.content.find('$tex ')+4):]
         try:
             sp.preview(command, viewer='file', filename='latex.png', euler=False)
+            
+            old_im = Image.open('latex.png')
+            old_size = old_im.size
+
+            new_size = (old_im.size[0]+20, old_im.size[1]+20)
+            new_im = Image.new("RGB", new_size, color = (255, 255, 255))
+            new_im.paste(old_im, (int((new_size[0]-old_size[0])/2),
+                                  int((new_size[1]-old_size[1])/2)))
+            new_im.save('latex.png')
+            
             await message.channel.send(file=discord.File("latex.png"))
         except Exception as e:
             await message.channel.send('beep boop. something went wrong.')
@@ -181,6 +192,16 @@ async def on_message(message):
         print(command)
         try:
             sp.preview(command, viewer='file', filename='latex.png', euler=False)
+
+            old_im = Image.open('latex.png')
+            old_size = old_im.size
+
+            new_size = (old_im.size[0]+20, old_im.size[1]+20)
+            new_im = Image.new("RGB", new_size, color = (255, 255, 255))
+            new_im.paste(old_im, (int((new_size[0]-old_size[0])/2),
+                                  int((new_size[1]-old_size[1])/2)))
+            new_im.save('latex.png')
+
             await message.channel.send(file=discord.File("latex.png"))
         except Exception as e:
             print(e)
