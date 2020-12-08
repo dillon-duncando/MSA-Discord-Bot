@@ -189,7 +189,6 @@ async def on_message(message):
     #render latex
     if('$Tex ' in message.content):
         command = message.content[(message.content.find('$Tex ')+4):]
-        print(command)
         try:
             sp.preview(command, viewer='file', filename='latex.png', euler=False)
 
