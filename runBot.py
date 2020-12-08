@@ -121,7 +121,7 @@ async def on_message(message):
         '$plot f(x), min, max: Plot a function of x from the min to the max \n'\
         '$polar f(x), min, max: Plot a function of x from the min to the max in polar coordinates \n'\
         '$roll xdy: Roll x number of y sided dice \n'\
-        '$tex LaTeX: Render LaTeX code and return as an image'
+        '$tex or $Tex LaTeX: Render LaTeX code and return as an image'
         )
         
     #roll dice, like in d&d
@@ -144,8 +144,8 @@ async def on_message(message):
             fig.savefig("newplot.png")
             await message.channel.send(file=discord.File("newplot.png"))
         except Exception as e:
+            print(e)
             await message.channel.send('beep boop. something went wrong.')
-            await message.channel.send(e)
             
     #draw a 2d graph in polar coordinates
     #only uses arithmetic and functions defined in the safe dict
@@ -166,13 +166,25 @@ async def on_message(message):
             await message.channel.send(e)
             
     #render latex
-    if message.content.startswith('$tex '):
+    if('$tex ' in message.content):
+        command = message.content[(message.content.find('$tex ')+4):]
         try:
-            sp.preview(message.content[4:], viewer='file', filename='latex.png', euler=False)
+            sp.preview(command, viewer='file', filename='latex.png', euler=False)
             await message.channel.send(file=discord.File("latex.png"))
         except Exception as e:
             await message.channel.send('beep boop. something went wrong.')
             await message.channel.send(e)
+            
+    #render latex
+    if('$Tex ' in message.content):
+        command = message.content[(message.content.find('$Tex ')+4):]
+        print(command)
+        try:
+            sp.preview(command, viewer='file', filename='latex.png', euler=False)
+            await message.channel.send(file=discord.File("latex.png"))
+        except Exception as e:
+            print(e)
+            await message.channel.send('beep boop. something went wrong.')
             
     #determine if a number is prime
     if message.content.startswith('$isPrime '):
@@ -209,7 +221,7 @@ async def on_message(message):
                 pFactor = bf.powerFactor(x)
                 x = pFactor[0]
                 expIncrement = pFactor[1]
-                #expIncrement = 1
+                #jexpIncrement = 1
                 while not bf.isPrime(x) and x != 1 and time < 60:
                     try:
                         p = next(primes)
@@ -244,8 +256,8 @@ async def on_message(message):
                     msg = str(int(text)) + ' = ' + "+".join(factorization)
                 await message.channel.send(msg)
         except Exception as e:
+            print(e)
             await message.channel.send('beep boop. something went wrong.')
-            await message.channel.send(e)
             
     #returns pi in terms of the superior circle constant
     if message.content.startswith('$pi'):
